@@ -6,7 +6,7 @@ Created on Tue Jun 18 11:42:48 2019
 @author: kaish114
 """
 
-# Recurrent Neural Network
+# Recurrent Neural Network (RNN-LSTM)
 
 
 
@@ -30,7 +30,7 @@ training_set_scaled = sc.fit_transform(training_set)
 # Creating a data structure with 60 timesteps and 1 output
 X_train = []
 y_train = []
-for i in range(60, 2265):     # for i in range(60 , 1258)
+for i in range(60, 2265):
     X_train.append(training_set_scaled[i-60:i, 0])
     y_train.append(training_set_scaled[i, 0])
 X_train, y_train = np.array(X_train), np.array(y_train)
@@ -77,21 +77,21 @@ regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
 # Fitting the RNN to the Training set
 regressor.fit(X_train, y_train, epochs = 100, batch_size = 32)
 
-#model.save('rnn_model.regressor')
+
 
 # Part 3 - Making the predictions and visualising the results
 
-# Getting the real stock price of 2017
+# Getting the real stock price of 2019
 dataset_test = pd.read_csv('Google_Stock_Price_Test1.csv')
 real_stock_price = dataset_test.iloc[:, 1:2].values
 
-# Getting the predicted stock price of 2017
+# Getting the predicted stock price of 2019
 dataset_total = pd.concat((dataset_train['Open'], dataset_test['Open']), axis = 0)
 inputs = dataset_total[len(dataset_total) - len(dataset_test) - 60:].values
 inputs = inputs.reshape(-1,1)
 inputs = sc.transform(inputs)
 X_test = []
-for i in range(60, 80):    # for i in range(60 , 80)
+for i in range(60, 80):    
     X_test.append(inputs[i-60:i, 0])
 X_test = np.array(X_test)
 X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
